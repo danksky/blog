@@ -1,7 +1,6 @@
 .Footer {
     position: relative;
-    top: 6%;
-    display: block;
+    top: 75px;
     height: 100px;
     background-color: gray;
 }

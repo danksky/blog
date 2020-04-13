@@ -1,9 +1,11 @@
 .MainContent {
     position: relative;
-    top: 6vh;
+    top: 75px;
     display: grid;
-    grid-template-rows: auto;
+    min-height: 100%;
+    grid-template-rows: 100%;
     grid-template-columns: 20% 60% 20%;
     row-gap: 12px;
-    grid-template-areas: "sidebar-left post sidebar-right"
+    grid-template-areas: 
+    "sidebar-left main sidebar-right"
 }

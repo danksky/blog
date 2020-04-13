@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router } from "react-router-dom";
 
 import Footer from './Footer';
 import MainContent from './MainContent';
@@ -9,9 +10,11 @@ import '../stylesheets/App/xl.css';
 function App() {
   return (
     <div className="App">
-      <TopBar />
-      <MainContent />
-      <Footer />
+      <Router>
+        <TopBar />
+        <MainContent />
+        <Footer />
+      </Router>
     </div>
   );
 }
