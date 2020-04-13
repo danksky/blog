@@ -25,7 +25,16 @@ export default class Feed extends React.Component {
     render() {
         return (
             <div className="Feed">
-                FEED PAGE
+                FEED PAGE:
+                <hr />
+                {this.state.posts.map(post => (
+                    <div className="feed-item"
+                        onClick={() => console.log("This should link to post with ID: " + post.PostID)}
+                        key={"key-" + post.PostID}>
+                        <strong>{post.Title}</strong> by {post.Author} <br />
+                        {post.CreatedOn}
+                    </div>
+                ))}
             </div>
         );
     }
