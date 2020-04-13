@@ -1,0 +1,8 @@
+.Post {
+    grid-area: post;
+    padding: 12px;
+}
+
+pre {
+    border-radius: 10px;
+}
