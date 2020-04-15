@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import PostCodeBlock from "./PostCodeBlock";
 
+import '../stylesheets/Post/xs.css';
+import '../stylesheets/Post/small.css';
+import '../stylesheets/Post/medium.css';
+import '../stylesheets/Post/large.css';
 import '../stylesheets/Post/xl.css';
 
 import post0 from '../media/post/HOW_TO_MAP_COVID.md';

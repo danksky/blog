@@ -6,7 +6,7 @@
         display: grid;
         min-height: calc(100% - 60px - 75px);
         grid-template-rows: 100%;
-        grid-template-columns: 20% 60% 20%;
+        grid-template-columns: 2.5% 95% 2.5%;
         row-gap: 12px;
         grid-template-areas: 
         "sidebar-left main sidebar-right"

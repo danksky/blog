@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
+import '../stylesheets/Feed/xs.css';
+import '../stylesheets/Feed/small.css';
+import '../stylesheets/Feed/medium.css';
+import '../stylesheets/Feed/large.css';
 import '../stylesheets/Feed/xl.css';
 
 export default class Feed extends React.Component {
@@ -14,7 +18,7 @@ export default class Feed extends React.Component {
                     Author: "Daniel Kawalsky",
                     CreatedOn: "April 12, 2020",
                     PostID: "how-to-map-covid-19-case-data",
-                }
+                },
             ]
         };
     }

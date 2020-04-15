@@ -5,6 +5,10 @@ import About from './About';
 import Feed from './Feed';
 import Post from './Post';
 
+import '../stylesheets/MainContent/xs.css';
+import '../stylesheets/MainContent/small.css';
+import '../stylesheets/MainContent/medium.css';
+import '../stylesheets/MainContent/large.css';
 import '../stylesheets/MainContent/xl.css';
 
 export default class MainContent extends React.Component {

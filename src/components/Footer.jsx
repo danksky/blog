@@ -1,5 +1,9 @@
 import React from 'react';
 
+import '../stylesheets/Footer/xs.css';
+import '../stylesheets/Footer/small.css';
+import '../stylesheets/Footer/medium.css';
+import '../stylesheets/Footer/large.css';
 import '../stylesheets/Footer/xl.css';
 
 export default class Footer extends React.Component {

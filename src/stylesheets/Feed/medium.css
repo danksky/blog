@@ -23,10 +23,13 @@
     
     .feed-item-author {
         font-style: italic;
-        float: right;
+        margin-top: 10px;
+        display: block;
     }
     
     .feed-item-createdOn {
+        margin-top: 10px;
         font-size: 0.75em;
+        display: block;
     }
 }

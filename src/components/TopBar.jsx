@@ -8,6 +8,10 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import '../stylesheets/TopBar/xs.css';
+import '../stylesheets/TopBar/small.css';
+import '../stylesheets/TopBar/medium.css';
+import '../stylesheets/TopBar/large.css';
 import '../stylesheets/TopBar/xl.css';
 
 export default class TopBar extends React.Component {
@@ -59,9 +63,7 @@ export default class TopBar extends React.Component {
                 <div className="top-bar-content">
                     <div className="top-bar-icon">
                         <Link to="/">
-                            <Button>
-                                <img src={require('../media/image/face.png')} alt="face icon" />
-                            </Button>
+                            <img src={require('../media/image/face.png')} alt="face icon" />
                         </Link>
                     </div>
                     <div className="top-bar-title">
@@ -84,7 +86,7 @@ export default class TopBar extends React.Component {
                                 <Paper>
                                     <ClickAwayListener onClickAway={this.handleClose}>
                                         <MenuList autoFocusItem={this.state.menuOpen} id="menu-list-grow" onKeyDown={this.handleListKeyDown}>
-                                            <MenuItem onClick={this.handleClose}><Link to="/about">ABOUT</Link></MenuItem>
+                                            <MenuItem className="top-bar-menu-item" onClick={this.handleClose}><Link to="/about">ABOUT</Link></MenuItem>
                                             <MenuItem onClick={this.handleClose}><Link to="/">HOME</Link></MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>

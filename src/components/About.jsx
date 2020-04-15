@@ -1,5 +1,9 @@
 import React from 'react';
 
+import '../stylesheets/About/xs.css';
+import '../stylesheets/About/small.css';
+import '../stylesheets/About/medium.css';
+import '../stylesheets/About/large.css';
 import '../stylesheets/About/xl.css';
 
 export default class About extends React.Component {
@@ -21,8 +25,8 @@ export default class About extends React.Component {
                 <h2>It's a code blog.</h2>
                 <p>
                     My latest programming finds, curiosities, and projects will
-                    be found here. Refer to my <a href="https://danielkawalsky.com">personal website</a>
-                    for my other work and ideas.
+                    be found here. Refer to my <a href="https://danielkawalsky.com">personal website</a> for
+                    my other work and ideas.
                 </p>
                 <h2>There are ads.</h2>
                 <p>
