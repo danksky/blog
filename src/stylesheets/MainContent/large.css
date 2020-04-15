@@ -1,5 +1,5 @@
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
     .MainContent {
         position: relative;
         top: 75px;
@@ -19,3 +19,4 @@
         border-right: none;
     }
 }
+
