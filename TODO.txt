@@ -1,1 +1,27 @@
-1. add in facebook comments
+1. Functionality:
+    a. Feed √
+        i.   Buttons √
+            1. Link to to posts √
+            2. Formatting √
+    b. About √
+        i.   Content √
+            1. Link to personal website √
+    c. Contact √
+        i.   Remove √
+    d. Footer √
+        i.   Social media buttons √
+            1. Github √
+            2. LinkedIn √
+            3. Email √
+        ii.  Copyright √
+    e. TopBar √
+        ii.  Menu √
+            1. Redirects √
+    f. Post √
+        i.   No Post √
+        ii.  Loading √
+
+2. Nice to have's
+    a. Google Analytics
+    b. Commenting
+    c. Hiding TopBar on scroll

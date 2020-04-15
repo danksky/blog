@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 import '../stylesheets/Feed/xl.css';
 
@@ -25,14 +26,15 @@ export default class Feed extends React.Component {
     render() {
         return (
             <div className="Feed">
-                FEED PAGE:
-                <hr />
+                <h1>ARTICLES</h1>
+                <div className="horizontal-bar" />
                 {this.state.posts.map(post => (
-                    <div className="feed-item"
-                        onClick={() => console.log("This should link to post with ID: " + post.PostID)}
-                        key={"key-" + post.PostID}>
-                        <strong>{post.Title}</strong> by {post.Author} <br />
-                        {post.CreatedOn}
+                    <div className="feed-item" key={"key-" + post.PostID}>
+                        <Link to={`/post/${post.PostID}`}>
+                            <div className="feed-item-title">{post.Title}</div>
+                            <div className="feed-item-author">by {post.Author}</div>
+                            <div className="feed-item-createdOn">{post.CreatedOn}</div>
+                        </Link>
                     </div>
                 ))}
             </div>

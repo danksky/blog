@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import ReactMarkdown from 'react-markdown';
 import PostCodeBlock from "./PostCodeBlock";
 
@@ -21,7 +22,6 @@ export default class Post extends React.Component {
         // Get the contents from the Markdown file and put them in the React state, so we can reference it in render() below.
         let postId = null;
         let post = null;
-        console.log(this.props.match)
         if (this.props.match && this.props.match.params && this.props.match.params.postId)
             postId = this.props.match.params.postId;
         if (postId != null)
@@ -43,7 +43,7 @@ export default class Post extends React.Component {
         return (
             <div className="Post">
                 {this.state.loading ?
-                    <div>LOADING TODO</div>
+                    <div className="post-loading">LOADING...</div>
                     :
                     (this.state.markdown ?
                         <ReactMarkdown
@@ -51,7 +51,11 @@ export default class Post extends React.Component {
                             renderers={{ code: PostCodeBlock }}
                         />
                         :
-                        "Sorry, there is no post here. TODO."
+                        <div className="post-not-found">
+                            <div className="post-not-found-404">404</div>
+                            <p>Sorry, there is no post with the URL "{this.props.match.url}"</p>
+                            <p><Link to="/">GO HOME</Link></p>
+                        </div>
                     )
                 }
 
