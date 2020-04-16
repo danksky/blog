@@ -1,26 +1,61 @@
+# Mapping CoViD-19 Cases by Country with React and D3 
+
+## Table of Contents
+
+1. Setup
+2. Get a basemap
+3. Present the map
+4. Get Real data
+5. Integrate the data
+
+## Purpose:
+
+We're going to create a [chloropleth map](https://en.wikipedia.org/wiki/Choropleth_map) of CoViD-19 cases by country using SVG's to create the map and [Johns Hopkins University CSSE](https://github.com/CSSEGISandData/COVID-19) Data Repository to populate it meaningfully. We'll use D3 to fetch both the basemap and the data. 
+
+- D3: to fetch the data
+- d3-geo: to project the basemap coordinates into a recognizable map
+- TopoJSON: to extract coordinates from the TopoJSON basemap
+
 > Note: Not only the content, but the _format_ of the data with which you'll be building a map in this tutorial changes rapidly. Please reach out if something doesn't work anymore so I can keep this updated.
 
-```js
-<a
-    className="App-link"
-    href="https://reactjs.org"
-    target="_blank"
-    rel="noopener noreferrer"
-    big man
-small man
->
-```
+![final product](https://images2.imgbox.com/e4/3b/2JN9O1KN_o.png "Final Product")
 
 ## Setup
 
+0. Open 2 tabs in terminal and navigate both to the folder where you're going to create your React project.
+
+```bash
+$ cd ~/Documents/ReactProjects
+```
+
 1. Create a React project.
 
-```
-$ npx create-react-app <MyAppName>
+```bash
+$ npx create-react-app MyAppName
 ```
 
-2. Clear out any stuff from App.js that nobody asked for.
+change the current working directory of both tabs to the project you've just created
 
+```bash
+$ cd MyAppName
+```
+
+In one tab, start the development build of your application. In the other, install the 3 NPM packages we'll be using– [`D3`](https://www.npmjs.com/package/d3), [`d3-geo`](https://www.npmjs.com/package/d3-geo), and [`topojson-client`](https://www.npmjs.com/package/topojson-client)
+
+**Tab 1:**
+```bash
+$ npm start
+```
+
+**Tab 2:**
+```bash
+$ npm install d3 3d-geo topojson-client
+```
+
+3. Clear out any stuff from **App.js** that nobody asked for.
+
+
+From **App.js**
 ```diff
 import React from 'react';
 - import logo from './logo.svg';
@@ -50,32 +85,518 @@ function App() {
 export default App;
 ```
 
-2. Install [D3](TODO)
+Remove all the rules from **App.css** so you're left with just the class App
 
-`npm install d3` TODO
+**App.css**
+```css
+.App {
+  
+}
+```
 
-## Let's get a "Basemap."
+4. Create **src/Map.jsx** where we'll do our dirty work. 
 
-### Source
+Your file structure should have these bones. 
 
-A base map is a ____. We're going to be making a choropleth map; in other words, the basemap is what we'll _start with_ before you "color in the lines" to present your geographical revelations.
-We'll use this [110 meter-quality map](https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json) from the TopoJSON [World Atlas repository](https://github.com/topojson/world-atlas).
+```tree
+.
+├── README.md
+├── package-lock.json
+├── package.json
+├── public
+└── src
+    ├── App.css
+    ├── App.js
+    ├── Map.jsx
+    ├── index.css
+    └── index.js
+```
 
-### Grab it
+5. Import **Map.jsx** into **App.js**
 
-Because the [geometry](TODO) of the map is formatted in JSON, we can use D3's `json()` method download it for our use.
-console.log it
-// TODO: Screenshot it here
-// paste the screenshot
-// See that the format of the thing is this?
-// The format of the country entry is like this: ...
+**App.js**
+```jsx
+import React from 'react';
+import Map from './Map';
 
-## Visualize the Map 
+import './App.css';
 
-// Just load the plain old map.
-// Now create a sample JS map with country data (we will try to mimick this format by reformatting data later). 
+function App() {
+  return (
+    <div className="App">
+      <Map />
+    </div>
+  );
+}
 
-# Let's Use Real Data
+export default App;
+```
 
-// later find out... oh no! not even the United States shows up!
-// 
+6. Define **Map.jsx**
+
+**Map.jsx**
+```jsx
+import React from 'react';
+
+export default class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+  }
+
+  render() {
+    return (
+      <div className="Map" >
+      	MAPONENT
+      </div>
+    );
+  }
+}
+
+```
+
+## Make a Map
+
+We're going to import an open-source SVG basemap of the world's countries' borders. We'll fill these borders in with gradients of a color to present the distribution of CoViD-19 cases. We'll use this [110 meter-quality map](https://github.com/topojson/world-atlas#countries-110m.json) from the TopoJSON [World Atlas repository](https://github.com/topojson/world-atlas). When you click on the "Download" link, you'll find the JSON we'll be importing, hosted at the URL: 
+
+```
+https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json
+```
+
+### Grab the Basemap TopoJSON
+
+Import the TopoJSON into your Map component using D3, then log its contents to the console.
+
+**Map.jsx**
+```jsx
+import React from 'react';
+
+import * as d3 from 'd3';
+
+export default class Map extends React.Component {
+
+  ...
+
+  componentDidMount() {
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+      .then(json => {
+        console.log(json);
+      });
+  }
+
+  ...
+}
+```
+
+Open your browser console to and expand the object you've just logged.
+
+Expand (**Object**) > **objects** > **countries** > **geometries**:
+
+![log of console output for TopoJSON with expansion to geometries member](https://i.ibb.co/rcPvmfX/topojson-level-2.png "TopoJSON log ouput")
+
+Notice the array under **geometries** has length 177. Those are distinct country entries, and because of our basemap is of the lowest resolution, we overlook some exceptionally small countries in this tutorial. 
+
+Now expand some of the **geometries** elements to find the country name associated with each entry. Try (**Object**) > **objects** > **countries** > **geometries** > **0** > **properties**, where you'll find the value **name**. You can log the 0th element's name by modifying the componentDidMount callback (above) to instead log:
+
+![log of console output for TopoJSON with expansion to geometries member, including name](https://images2.imgbox.com/d4/a4/tlBgBkC5_o.png "TopoJSON log ouput to name")
+
+```jsx
+console.log(json.objects.countries.geometries[ 0 ].properties.name);
+```
+
+### Convert the TopoJSON to Coordinates
+
+If you look at the **arcs** field, you'll find an array of [delta-encoded](https://en.wikipedia.org/wiki/Delta_encoding) instructions on how to draw that particular polygon. We're going to use the `topojson-client` package we so conveniently downloaded before to make turn the TopoJSON into a map we recognize by converting the arcs to SVG paths.
+
+If you're curious about how `topojson-client` helps–before looking at the resulting **Map.jsx** file, notice how the `feature()` function we'll import from `topojson-client` extracts the *coordinates* from the delta-encoded arcs by logging the following: 
+
+```jsx
+import { feature } from "topojson-client"
+...
+	componentDidMount() {
+		...
+				console.log(feature(json, json.objects.countries));
+		...
+	}
+```
+
+![topojson feature-ized](https://images2.imgbox.com/58/63/KRDrU2Tw_o.png "TopoJSON feature-ized")
+
+### Project the Coordinates and Visualize the SVG
+
+Make the following changes (explained after the code block) to **Map.jsx**:
+
+**Map.jsx**
+```jsx
+import React from 'react';
+
+import * as d3 from 'd3';
+import { geoMercator, geoPath } from "d3-geo"
+import { feature } from "topojson-client"
+
+const projection = geoMercator() // 6
+  .scale(100)
+  .translate([400, 300])
+
+export default class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      countryShapes: null, // 1
+    };
+  }
+
+  componentDidMount() {
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+      .then(json => {
+        this.setState({ // 4
+          countryShapes: feature(json, json.objects.countries).features,
+        })
+      });
+  }
+
+  render() {
+    return (
+      <div className="Map" >
+        <svg width={1024} height={650} viewBox="0 0 1024 650"> {/* 2 */}
+          <g className="countries-group">
+            {this.state.countryShapes ? // 3
+              this.state.countryShapes.map((featureElement, index) => ( // 5
+                <path
+                  key={`country-svg-${index}`}
+                  d={geoPath().projection(projection)(featureElement)} // 7
+                  className="country"
+                  fill={`rgba(255,0,255,0.5)`} // 8
+                  stroke="black"
+                  strokeWidth={0.25}
+                />
+              )) : null
+            }
+          </g>
+        </svg>
+      </div>
+    );
+  }
+}
+```
+
+1. We define the object `countryShapes` variable in our component state with default value `null`. This will be re-initialized in `componentDidMount`.
+2. By default, we render an SVG image with a `<g>` element called `countries-group`.
+3. Until we have defined the `countryShapes` state variable, we don't render any shape `<path />`s within the `<g>` element.
+4. After the `Map` component's first render, set the `countryShapes` state variable to the features of the TopoJSON we inspected just above this code block.
+5. Now that the `countryShapes` state variable is truthy, turning each `featureElement`, which contains the coordiate borders of each country, into an array of `<path />` components.
+6. Use the Mercator projection provided by `d3-geo`, scale the image to 100% (instead of the default 150%) and translate the map right on the x-axis by 400 down the y-axis by 300. 
+7. The customized Mercator `projection`, provided to `geoPath().projection()`, returns a function that takes a `featureElement`, "projects" its coordinates, and sets it as the line(s) drawn with `<path />`. 
+8. Uniformly fill each `<path />` polygon with a pink color defined by `rgba(255, 0, 255, 0.5)`.
+
+### Make the Map into a Chloropleth Map
+
+To make this a chloropleth map, we will show the differences in the quantity of cases by country by varying the opacity of the base color. Let's make a helper function that uses the name of the country we pull from the TopoJSON to produce a color, using sample data as reference for CoViD-19 case counts.
+
+Define the sample data below `projection`:
+
+```jsx
+const sampleData = {
+  "Fiji": 3074,
+  "Tanzania": 9138,
+  "W. Sahara": 4143,
+  "Canada": 9726,
+  "United States of America": 2439,
+  "Kazakhstan": 5090,
+  "Uzbekistan": 7353,
+  "Papua New Guinea": 6460,
+  "Indonesia": 6747,
+  "Argentina": 9,
+  "Chile": 5864,
+  "Dem. Rep. Congo": 6845,
+  "Somalia": 192,
+  "Kenya": 6651,
+  "Sudan": 346,
+  "Chad": 6251,
+  "Haiti": 1143,
+  "Dominican Rep.": 2436,
+  "Russia": 4703,
+  "Bahamas": 5904,
+  "Falkland Is.": 3269,
+  "Norway": 8617,
+  "Greenland": 3984,
+  "Fr. S. Antarctic Lands": 8599,
+  "Timor-Leste": 6780,
+  "South Africa": 4176,
+  "Lesotho": 1642,
+  "Mexico": 4020,
+  "Uruguay": 8650,
+  "Brazil": 2984,
+  "Bolivia": 1736,
+  "Peru": 2555,
+  "Colombia": 4452,
+  "Panama": 4131,
+  "Costa Rica": 91,
+  "Nicaragua": 7043,
+  "Honduras": 6387,
+  "El Salvador": 1059,
+  "Guatemala": 3389,
+  "Belize": 1865,
+  "Venezuela": 7918,
+  "Guyana": 9731,
+  "Suriname": 7663,
+  "France": 8582,
+  "Ecuador": 1889,
+  "Puerto Rico": 6067,
+  "Jamaica": 5362,
+  "Cuba": 6440,
+  "Zimbabwe": 1816,
+  "Botswana": 5960,
+  "Namibia": 9102,
+  "Senegal": 9869,
+  "Mali": 2561,
+  "Mauritania": 9969,
+  "Benin": 6901,
+  "Niger": 5985,
+  "Nigeria": 4014,
+  "Cameroon": 3428,
+  "Togo": 4304,
+  "Ghana": 8478,
+  "Côte d'Ivoire": 1051,
+  "Guinea": 5548,
+  "Guinea-Bissau": 7992,
+  "Liberia": 6675,
+  "Sierra Leone": 4517,
+  "Burkina Faso": 4694,
+  "Central African Rep.": 1429,
+  "Congo": 7581,
+  "Gabon": 449,
+  "Eq. Guinea": 4241,
+  "Zambia": 3389,
+  "Malawi": 5880,
+};
+```
+
+Define the helper function `getCountryFill`: 
+
+```jsx
+function getCountryFill(featureElement) {
+  let name = featureElement.properties.name;
+  let value = sampleData[name];
+  if (value) {
+    let opacity = value / 10000;
+    return `rgba(255, 0, 255, ${opacity})`; // 2
+  }
+  return `rgba(200, 200, 200, 1)`; // 1
+}
+```
+
+1. If there is no value in the data, use a default gray value to indicate "no data."
+2. If the value is present in the array, use our pink color from before and vary the opacity.
+
+The values in the sample data are randomly generated integers 0-9,999. For now, the opacity is determined by the arbitary function "`let opacity = value / 10000`." We'll make this function less trivial further on.
+
+Let's make this chloropleth map happen. For your `<path />`, set the `fill` parameter as follows:
+
+```jsx
+...
+	<path
+      key={`country-svg-${index}`}
+      d={geoPath().projection(projection)(featureElement)}
+      className="country"
+      fill={getCountryFill(featureElement)}
+      stroke="black"
+      strokeWidth={0.25}
+    />
+...
+```
+
+![Basic Chloropleth Map with Mercator Projection using Sample Data](https://images2.imgbox.com/15/c7/9ZxHBi8w_o.png "Basic Chloropleth Map with Mercator Projection using Sample Data")
+
+## Use Updated Data
+
+We're going to present current CoViD-19 case data, so I'm not going to show any more screenshots of what you should expect to see in your map. That said, let's move onto real data! Open [Johns Hopkins' updated time series-confirmed case data](https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv) in another tab. 
+
+### Understand the Data
+
+It may show up as a table, or it could show up raw, [like this](https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv). Anyhow, take a look at the columns. See that they start with \[Province/State, Country/Region, Lat, Long\] and then continue with dates? This is our schema. With each day, we will (predictably) have one more column.
+
+| Province/State | Country/Region | Lat | Long | ... | 1/22/20 | 1/23/20 | ... |
+|----------------|----------------|-----|------|-----|---------|---------|-----|
+
+Now look at the rows. See that many start with a `,` (or a blank cell, if you're looking at the pretty version)? That suggests that we don't have "`Province/State`" breakdowns (first column) for every "`Country/Region`" (second column). Because the map is only specific enough to show countries, we'll reduce each countries' province's daily values into one value for the whole country. Before we go ahead and start reducing, I need to point out something frustrating about this data. The country names here are different from the country names in our TopoJSON! I'll present a workaround later on, and you can take it from there. Let's grab the data.
+
+### Grab the Data
+
+In **Map.jsx**, download the raw CSV data using `d3.csv()` and log it to the console:
+```jsx
+componentDidMount() {
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+  .then(json => {
+    this.setState({
+      countryShapes: feature(json, json.objects.countries).features,
+    });
+    d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+      .then(csvData => {
+        console.log(csvData);
+        console.log(csvData[0]);
+      });
+  })
+}
+```
+
+![CSV Data](https://images2.imgbox.com/f4/6e/l53BNT1o_o.jpg "CSV Data")
+
+Nice! It gives us the names of the columns. All in all, the CSV data we're dealing with: 
+
+- is an array of objects wherein each key is a column name. 
+- has a field `columns`, which is itself an array of columns names.
+
+Moving on...
+
+### Consolidate the Data
+
+Using the country name in each array element, reduce the last day's Confirmed Case count across each country's. Your **Map.jsx** should look something like this:
+
+**Map.jsx**
+```jsx
+import React from 'react';
+
+import * as d3 from 'd3';
+import { geoMercator, geoPath } from "d3-geo"
+import { feature } from "topojson-client"
+
+const projection = geoMercator()
+  .scale(100)
+  .translate([400, 300])
+
+const sampleData = {
+  ...
+};
+
+function getCountryFill(featureElement) {
+  ...
+}
+
+export default class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      countryShapes: null,
+      countryDataset: null,
+    };
+  }
+
+  // 1
+  async componentDidMount() {
+    var countryShapes = null;
+    var countryDataset = null;
+    // 2
+    await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+      .then(async (json) => {
+        countryShapes = feature(json, json.objects.countries).features;
+        // 3
+        await d3.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+          .then(csvData => {
+            // 4
+            countryDataset = {};
+            let latestDate = csvData.columns[csvData.columns.length - 1];
+            csvData.forEach(province => {
+              let countryName = province["Country/Region"];
+              let caseCount = province[latestDate];
+              if (countryDataset[countryName] === undefined) {
+                countryDataset[countryName] = Number.parseInt(caseCount);
+              } else {
+                countryDataset[countryName] += Number.parseInt(caseCount);
+              }
+            })
+          });
+      });
+
+    this.setState({
+      countryShapes: countryShapes,
+      countryDataset: countryDataset,
+    });
+  }
+
+  render() {
+    ...
+  }
+}
+```
+
+1. We'll stick an `async` in front of `componentDidMount()` to make sure we don't `setState()` with `null` values, i.e. wait to complete the promise.
+2. Wait for the `d3.json()` call to complete.
+3. Wait for the `d3.csv()` call to complete.
+4. Reduce the dataset to map of (key: Country Name, value: Cases) pairs
+
+We can try to use our fancy new `countryDataset` as reference data for our chloropleth map, but if you go ahead and give it a try...
+
+**Map.jsx**
+```diff
+- const sampleData = {
+-   "Fiji": 3074,
+-   ...
+-   "Malawi": 5880,
+- };
+
+- function getCountryFill(featureElement) {
++ function getCountryFill(referenceData, featureElement) {
+    let name = featureElement.properties.name;
+-   let value = sampleData[name];
++   let value = referenceData[name];
+
+...
+
+-  fill={getCountryFill(featureElement)}
++  fill={getCountryFill(this.state.countryDataset, featureElement)}
+```
+
+...you'll see it doesn't work out so well. Even the USA is missing data. If you went down the road above, go ahead and keep your changes. We'll build on them soon.
+
+To fill in the gaps, add this above the `setState()` statement in **Map.jsx**'s `componentDidMount()` function:
+
+```diff
+async componentDidMount() {
+  var countryShapes = null;
+  var countryDataset = null;
+  await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+    .then(async (json) => {
+      ...
+    });
+
++ // Left: the name of the country as indicated in the TopoJSON
++ // Right: the name of the country as indicated in the JHU CSSE case data
++ countryDataset["United States of America"] = countryDataset["US"];
++ countryDataset["Greenland"] = countryDataset["Denmark"];
++ countryDataset["Congo"] = countryDataset["Congo (Brazzaville)"];
++ countryDataset["Dem. Rep. Congo"] = countryDataset["Congo (Kinshasa)"];
++ countryDataset["Central African Rep."] = countryDataset["Central African Republic"];
++ countryDataset["S. Sudan"] = countryDataset["South Sudan"];
++ countryDataset["Côte d'Ivoire"] = countryDataset["Cote d'Ivoire"];
++ countryDataset["Myanmar"] = countryDataset["Burma"];
++ countryDataset["South Korea"] = countryDataset["Korea, South"];
+
+  this.setState({
+    ...
+  });
+}
+```
+
+Look at your map render. Some, but not all previously gray countries should now be some shade of pink; but oh no! Our outdated opacity function makes country case-quantities indistinguishable! Let's revise it. 
+
+Change the following in **Map.jsx**':
+```diff
+  function getCountryFill(referenceData, featureElement) {
+	  let name = featureElement.properties.name;
+	  let value = referenceData[name];
+	  if (value) {
+-	    let opacity = value / 10000;
++	    let opacity = Math.log(value) / Math.log(8) / 10;
+	    return `rgba(255, 0, 255, ${opacity})`;
+	  }
+	  return `rgba(200, 200, 200, 1)`;
+  }
+```
+
+Your map now shows the most updated Johns Hopkins University confirmed cases. 
+
+Credits: https://medium.com/@zimrick/how-to-create-pure-react-svg-maps-with-topojson-and-d3-geo-e4a6b6848a98

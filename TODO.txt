@@ -20,8 +20,42 @@
     f. Post √
         i.   No Post √
         ii.  Loading √
+        iii. Images
+        iv.  Inline code
+        v.   Table
+        vi.  Font size
+2. Deployment
+    a. Host on Firebase
+    b. Google Analytics
 
-2. Nice to have's
-    a. Google Analytics
+3. Nice to have's
     b. Commenting
     c. Hiding TopBar on scroll
+    d. link to mapcovid.org
+    e. update mapcovig.org (maybe just remove timeline)
+
+--------
+
+==> Post 0 <==
+ 1. Structure of the tutorial. 
+     a. Table of Contents
+     b. Flow
+        i.    Actually makes sense
+        ii.   Conclusion
+     c. Linking to credits.
+ 2. Cleanup
+     a. Consistent
+         i.   method references
+         ii.  file names
+         iii. Chrome inspector variables (JS)
+         iv.  tab sizing
+         v.   spelling of CoVid-19
+         vi.  numbering
+         vii. code block file naming
+         viii.breadcrumb paths
+         ix.  code block annotation/footers
+     b. Typos
+     c. TODOs
+     d. 
+ 2. Host all images.
+ 3. Go through it. 
