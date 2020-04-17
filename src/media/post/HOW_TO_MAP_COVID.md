@@ -15,7 +15,7 @@
   * Final Touches
 * Acknowledgements
 
-You're going to make a [chloropleth](https://en.wikipedia.org/wiki/Choropleth_map) component like the one I used in [WatchCOVID.org](https://www.watchCOVID.org); that is, a chloropleth map of confirmed global COVID-19 cases in React, and you'll be using SVG's to create the map and [Johns Hopkins University CSSE](https://github.com/CSSEGISandData/COVID-19) Data Repository to populate it meaningfully. D3 will help us fetch the basemap, project the basemap, and fetch the case data.
+You're going to make a [choropleth](https://en.wikipedia.org/wiki/Choropleth_map) component like the one I used in [WatchCOVID.org](https://www.watchCOVID.org); that is, a choropleth map of confirmed global COVID-19 cases in React, and you'll be using SVG's to create the map and [Johns Hopkins University CSSE](https://github.com/CSSEGISandData/COVID-19) Data Repository to populate it meaningfully. D3 will help us fetch the basemap, project the basemap, and fetch the case data.
 
 During setup, you'll install these:
 
@@ -320,7 +320,7 @@ export default class Map extends React.Component {
 
 ### Make the Map into a Chloropleth Map
 
-To make this a chloropleth map, you will show the varying quantities of cases by country by varying base color's opacity. Let's make a helper function that uses the name of the country you pull from the TopoJSON (and sample COVID-19 case data) to produce a color.
+To make this a choropleth map, you will show the varying quantities of cases by country by varying base color's opacity. Let's make a helper function that uses the name of the country you pull from the TopoJSON (and sample COVID-19 case data) to produce a color.
 
 Define the sample data below `projection` in **Map.jsx**:
 
@@ -420,7 +420,7 @@ function getCountryFill(featureElement) {
 
 The values in the sample data are randomly positive integers less than 10,000. For now, the opacity is arbitrarily defined by "`value / 10000`." You'll make this function less trivial further on.
 
-Let's make this chloropleth map happen. For your `<path />`, redefine the `fill` parameter:
+Let's make this choropleth map happen. For your `<path />`, redefine the `fill` parameter:
 
 ```jsx
 ...
@@ -443,7 +443,7 @@ You're going to present current COVID-19 case data, so I'm not going to show any
 
 ### Understand the Data
 
-It may show up as a table, or it could show up raw, [like this](https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_COVID_19_data/csse_COVID_19_time_series/time_series_COVID19_confirmed_global.csv). Anyhow, take a look at the columns. See that they start with \[Province/State, Country/Region, Lat, Long\] and then continue with dates? This is your schema. With each day, you will (predictably) have one more column.
+It may show up as a table, or it could show up raw, [like this](https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv). Anyhow, take a look at the columns. See that they start with \[Province/State, Country/Region, Lat, Long\] and then continue with dates? This is your schema. With each day, you will (predictably) have one more column.
 
 | Province/State | Country/Region | Lat | Long | ... | 1/22/20 | 1/23/20 | ... |
 |----------------|----------------|-----|------|-----|---------|---------|-----|
@@ -560,7 +560,7 @@ export default class Map extends React.Component {
 4. Reduce the dataset to map of (key: Country Name, value: Cases) pairs
 5. Set the dataset to a new state variable, `countryDataset`
 
-You can try to use your fancy new `countryDataset` as reference data for your chloropleth map, so if you go ahead and give it a try...
+You can try to use your fancy new `countryDataset` as reference data for your choropleth map, so if you go ahead and give it a try...
 
 **Map.jsx**
 ```diff

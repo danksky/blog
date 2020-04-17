@@ -14,7 +14,7 @@ export default class Feed extends React.Component {
         this.state = {
             posts: [
                 {
-                    Title: "How to Map Covid-19 Case Data",
+                    Title: "Mapping COVID-19 Cases by Country with React and D3",
                     Author: "Daniel Kawalsky",
                     CreatedOn: "April 12, 2020",
                     PostID: "how-to-map-covid-19-case-data",
