@@ -30,4 +30,26 @@
         font-weight: bold;
         text-decoration: none;
     }
+
+    table {
+        display: block;
+        overflow: scroll;
+        width: 100%;
+        border: none;
+    }
+
+    tr {
+        padding: none;
+    }
+
+    th {
+        width: 20%;
+        border-left: 1px solid black;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    th :nth-of-type(1) {
+        border-right: 1px solid black;
+    }
 }
