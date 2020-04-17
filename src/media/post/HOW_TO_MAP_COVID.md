@@ -7,7 +7,7 @@
   * Grab the Basemap TopoJSON
   * Convert the TopoJSON to Coordinates
   * Project the Coordinates and Visualize the SVG
-  * Make the Map into a Chloropleth Map
+  * Make the Map into a Choropleth Map
 * Use Updated Data
   * Understand the Data
   * Grab the Data
@@ -318,7 +318,7 @@ export default class Map extends React.Component {
 7. The customized Mercator `projection`, provided to `geoPath().projection()`, returns a function that takes a `featureElement`. This function returns `featureElement`'s projected coordinates. Give this to `<path />` to draw a country's borders.
 8. Uniformly fill each `<path />` polygon with a pink color defined by `rgba(255, 0, 255, 0.5)`.
 
-### Make the Map into a Chloropleth Map
+### Make the Map into a Choropleth Map
 
 To make this a choropleth map, you will show the varying quantities of cases by country by varying base color's opacity. Let's make a helper function that uses the name of the country you pull from the TopoJSON (and sample COVID-19 case data) to produce a color.
 
@@ -435,7 +435,7 @@ Let's make this choropleth map happen. For your `<path />`, redefine the `fill` 
 ...
 ```
 
-![Basic Chloropleth Map with Mercator Projection using Sample Data](https://images2.imgbox.com/15/c7/9ZxHBi8w_o.png "Basic Chloropleth Map with Mercator Projection using Sample Data")
+![Basic Choropleth Map with Mercator Projection using Sample Data](https://images2.imgbox.com/15/c7/9ZxHBi8w_o.png "Basic Choropleth Map with Mercator Projection using Sample Data")
 
 ## Use Updated Data
 
